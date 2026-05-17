@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-show
+  namespace: default
+  labels:
+    app: web-show
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web-show
+  template:
+    metadata:
+      labels:
+        app: web-show
+    spec:
+      containers:
+        - name: web-show
+          image: ghcr.io/chaos-mesh/web-show
+          imagePullPolicy: Always
+          command:
+            - /usr/local/bin/web-show
+            - --target-ip=10.80.0.110 # run this command, and enter in the ip you get from this command into the target-ip
+                                  # kubectl get pod -n kube-system -o wide| grep kube-controller | head -n 1
+          ports:
+            - name: web-port
+              containerPort: 8081
